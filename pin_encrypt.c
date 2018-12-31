@@ -11,7 +11,22 @@ uint encrypt(uchar a, uchar b, uchar c, uchar d)
 {
 	uchar order = get_random_order();
 	ushort shuffledPassword = shuffle_password(a, b, c, d, order);
-	return shuffledPassword;
+	uchar salt = get_salt();
+	return get_hash(order, shuffledPassword, salt);
+}
+
+uint get_hash(uchar order, ushort shuffledPassword, uchar salt) {
+	_Bool orderFirst = rand() % 2 == 0;
+	if (orderFirst) {
+		return (order << 24) | (shuffledPassword << 8) | salt;
+	}
+	else {
+		return (salt << 24) | (shuffledPassword << 8) | order;
+	}
+}
+
+uchar get_salt() {
+	return 229 + (rand() % 27);
 }
 
 uchar get_random_order()
@@ -22,9 +37,9 @@ uchar get_random_order()
 	set_order_array_element(arr, 2, 4);
 	set_order_array_element(arr, 3, 4);
 	return
-		((arr[0] << 6) & 0b11000000) +
-		((arr[1] << 4) & 0b00110000) +
-		((arr[2] << 2) & 0b00001100) +
+		((arr[0] << 6) & 0b11000000) |
+		((arr[1] << 4) & 0b00110000) |
+		((arr[2] << 2) & 0b00001100) |
 		(arr[3] & 0b00000011);
 }
 
@@ -56,11 +71,10 @@ ushort shuffle_password(uchar a, uchar b, uchar c, uchar d, uchar order)
 	uchar bPosition = (order & 0b00110000) >> 4;
 	uchar cPosition = (order & 0b00001100) >> 2;
 	uchar dPosition = order & 0b00000011;
-	ushort first = ((ushort)a) << (12 - aPosition * 4);
-	ushort second = ((ushort)b) << (12 - bPosition * 4);
-	ushort third = ((ushort)c) << (12 - cPosition * 4);
-	ushort fourth = ((ushort)d) << (12 - dPosition * 4);
-	return first + second + third + fourth;
+	return ((ushort)a) << (12 - aPosition * 4) |
+		((ushort)b) << (12 - bPosition * 4) |
+		((ushort)c) << (12 - cPosition * 4) |
+		((ushort)d) << (12 - dPosition * 4);
 }
 
 #endif // !PIN_ENCRYPT_C

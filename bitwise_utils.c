@@ -21,48 +21,24 @@ void print_bits(unsigned int n, unsigned char type_size, unsigned char space_bit
 	printf("\n");
 }
 
-// set_bit(0b0000011, 3);
-// 0b0000011 | (0b0000001 << n - 1)
 unsigned char set_bit(unsigned char ch, int n)
 {
 	return ch | (1 << (n - 1));
 }
 
-// clear_bit(0b0000111, 3);
-// 0b0000111 & ~(0b0000001 << n - 1)
-// 0b0000111
-// &
-// 0b1111011
-// =
-// 0b0000011
 unsigned char clear_bit(unsigned char ch, int n)
 {
 	return ch & ~(1 << (n - 1));
 }
 
-// invert_bit(0b0000111, 5);
-// 0b0000111 & ~(0b0000001 << n - 1)
-// 0b0000111
-// ^
-// 0b0010000
-// =
-// 0b0010111
 unsigned char invert_bit(unsigned char ch, int n)
 {
 	return ch ^ (1 << (n - 1));
 }
 
-// get_bit(0b0000111, 5);
-// 0b0000111 & (0b0000001 << n - 1)
-// 0b0000111
-// &
-// 0b0010000
-// =
-// 0b0010111 != 0
 _Bool get_bit(unsigned char ch, int n)
 {
 	return (ch & (1 << (n - 1))) != 0;
 }
-
 
 #endif // !BITWISE_UTILS_CPP

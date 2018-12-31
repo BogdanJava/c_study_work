@@ -9,18 +9,10 @@
 int main() {
 	srand(time(NULL));
 	printf("password: %s\n", "5890");
-	ushort a = 5 << 12;
-	ushort b = 8 << 8;
-	ushort c = 9 << 4;
-	ushort d = 0;
-	print_bits(a + b + c + d, sizeof(unsigned short), 4);
-	ushort encrypted = encrypt(5, 8, 9, 0);
-	printf("encrypted password: %i%i%i%i\n",
-		(encrypted >> 12) & 0b1111,
-		(encrypted >> 8) & 0b1111,
-		(encrypted >> 4) & 0b1111,
-		encrypted & 0b1111);
-	print_bits(encrypted, sizeof(unsigned short), 4);
+	ushort pass = (5 << 12) | (8 << 8) | (9 << 4) | 0;
+	print_bits(pass, sizeof(unsigned short), 8);
+	uint encrypted = encrypt(5, 8, 9, 0);
+	print_bits(encrypted, sizeof(unsigned int), 8);
 	getchar();
 	return 0;
 }
